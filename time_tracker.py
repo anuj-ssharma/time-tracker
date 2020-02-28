@@ -2,27 +2,52 @@ import argparse
 import datetime
 import csv
 
-EVENTS = ['start_day', 'start_break', 'end_break', 'end_day']
-
+EVENTS = ['start_day', 'start_break', 'end_break', 'end_day', 'calculate']
+START_DAY = []
+START_BREAK = []
+END_BREAK = []
+END_DAY = []
 
 def calculate_working_hours():
-    pass
+    read_file()
+
+
 
 def calculate_break_duration():
     pass
 
 def record_event(event_name):
-    event_time = datetime.datetime.now()
-    write_to_file([event_name, event_time])
+    if event_name == 'calculate':
+        calculate_working_hours()
+    else:
+        event_time = datetime.datetime.now()
+        write_to_file([event_name, event_time])
 
 def write_to_file(data):
     with open('time_tracker.csv', 'ab',) as csv_file:
         writer = csv.writer(csv_file)
         writer.writerow(data)
 
+def read_file():
+    with open('time_tracker.csv', 'r',) as csv_file:
+        reader = csv.reader(csv_file)
+        for row in reader:
+            event_name = row[0]
+            event_datetime = datetime.datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S.%f')
+            if event_name == 'start_day':
+                START_DAY.append(event_datetime)
+            if event_name == 'start_break':
+                START_BREAK.append(event_datetime)
+            if event_name == 'end_break':
+                END_BREAK.append(event_datetime)
+            if event_name == 'end_day':
+                END_DAY.append(event_datetime)
+
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--event', help="can be start_day, start_break, end_break, end_day")
+
 args = parser.parse_args()
 if args.event in EVENTS:
     record_event(args.event)
