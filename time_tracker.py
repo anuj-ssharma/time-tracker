@@ -55,20 +55,22 @@ def read_file_and_store_data():
         for row in reader:
             event_name = row[0]
             event_datetime = datetime.datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S.%f')
-            if event_name == 'start_day':
-                START_DAY.append(event_datetime)
-            if event_name == 'start_break':
-                START_BREAK.append(event_datetime)
-            if event_name == 'end_break':
-                END_BREAK.append(event_datetime)
-            if event_name == 'end_day':
-                END_DAY.append(event_datetime)
+            today = datetime.datetime.now()
+
+            if event_datetime.date() == today.date():
+                if event_name == 'start_day':
+                    START_DAY.append(event_datetime)
+                if event_name == 'start_break':
+                    START_BREAK.append(event_datetime)
+                if event_name == 'end_break':
+                    END_BREAK.append(event_datetime)
+                if event_name == 'end_day':
+                    END_DAY.append(event_datetime)
 
 
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--event', help="can be start_day, start_break, end_break, end_day")
-
 args = parser.parse_args()
 if args.event in EVENTS:
     record_event(args.event)
