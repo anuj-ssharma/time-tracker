@@ -17,6 +17,9 @@ def calculate_working_hours():
     seconds_worked_in_day = (END_DAY[0] - START_DAY[0]).total_seconds()
     seconds_break_in_a_day = calculate_break_duration()
     total_working_seconds = seconds_worked_in_day - seconds_break_in_a_day
+    total_working_mins = total_working_seconds/60
+    total_working_hours = total_working_mins/60
+    print("%.2f" % total_working_hours)
 
 def calculate_break_duration():
     seconds_break_in_a_day = 0
