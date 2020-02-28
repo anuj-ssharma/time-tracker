@@ -11,7 +11,7 @@ START_DAY = []
 START_BREAK = []
 END_BREAK = []
 END_DAY = []
-
+FOR_DATE = 'today'
 
 def calculate_working_hours():
     read_file_and_store_data()
@@ -50,14 +50,17 @@ def write_to_file(data):
         writer.writerow(data)
 
 def read_file_and_store_data():
+    if FOR_DATE == 'today':
+        for_date = datetime.datetime.now()
+    else:
+        for_date = datetime.datetime.strptime(FOR_DATE, '%d-%m-%Y')
+
     with open('time_tracker.csv', 'r',) as csv_file:
         reader = csv.reader(csv_file)
         for row in reader:
             event_name = row[0]
             event_datetime = datetime.datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S.%f')
-            today = datetime.datetime.now()
-
-            if event_datetime.date() == today.date():
+            if event_datetime.date() == for_date.date():
                 if event_name == 'start_day':
                     START_DAY.append(event_datetime)
                 if event_name == 'start_break':
@@ -71,7 +74,11 @@ def read_file_and_store_data():
 
 parser = argparse.ArgumentParser()
 parser.add_argument('-e', '--event', help="can be start_day, start_break, end_break, end_day")
+parser.add_argument('-d', '--date', help="date in the format dd-mm-yyyy", default="today")
+
 args = parser.parse_args()
+if args.date:
+    FOR_DATE = args.date
 if args.event in EVENTS:
     record_event(args.event)
 else:
