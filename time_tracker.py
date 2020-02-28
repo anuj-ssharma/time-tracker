@@ -4,6 +4,7 @@ import csv
 
 # TODO: Add validation - break or start time cannot be greater than end_day time
 # TODO: Add validation - there cannot be more than one start day or end day date
+# TODO: Calculate for the current week
 
 EVENTS = ['start_day', 'start_break', 'end_break', 'end_day', 'calculate']
 START_DAY = []
