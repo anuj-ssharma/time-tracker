@@ -10,11 +10,15 @@ END_DAY = []
 
 def calculate_working_hours():
     read_file()
-
-
+    seconds_worked_in_day = (END_DAY[0] - START_DAY[0]).total_seconds()
+    seconds_break_in_a_day = calculate_break_duration()
+    total_working_hours = seconds_worked_in_day - seconds_break_in_a_day
 
 def calculate_break_duration():
-    pass
+    seconds_break_in_a_day = 0
+    for start, stop in zip(START_BREAK, END_BREAK):
+        seconds_break_in_a_day += (stop - start).total_seconds()
+    return seconds_break_in_a_day
 
 def record_event(event_name):
     if event_name == 'calculate':
