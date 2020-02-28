@@ -12,14 +12,24 @@ START_BREAK = []
 END_BREAK = []
 END_DAY = []
 
+
 def calculate_working_hours():
-    read_file()
-    seconds_worked_in_day = (END_DAY[0] - START_DAY[0]).total_seconds()
+    read_file_and_store_data()
+    seconds_worked_in_day = calculate_day_duration()
     seconds_break_in_a_day = calculate_break_duration()
+
     total_working_seconds = seconds_worked_in_day - seconds_break_in_a_day
     total_working_mins = total_working_seconds/60
     total_working_hours = total_working_mins/60
     print("%.2f" % total_working_hours)
+
+
+def calculate_day_duration():
+    if END_DAY == []:
+        return (END_BREAK[len(END_BREAK) - 1] - START_DAY[0]).total_seconds()
+    else:
+        return (END_DAY[0] - START_DAY[0]).total_seconds()
+
 
 def calculate_break_duration():
     seconds_break_in_a_day = 0
@@ -39,7 +49,7 @@ def write_to_file(data):
         writer = csv.writer(csv_file)
         writer.writerow(data)
 
-def read_file():
+def read_file_and_store_data():
     with open('time_tracker.csv', 'r',) as csv_file:
         reader = csv.reader(csv_file)
         for row in reader:
